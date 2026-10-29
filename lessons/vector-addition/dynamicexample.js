@@ -1,19 +1,19 @@
-var width = window.innerWidth;
-var height = window.innerHeight;
 var scale = 3;
-var aug = 40 * 5;
-var add = aug + 40 * 8;
+
+// Initialize Konva Stage with container dimensions
+var containerEl = document.getElementById('container');
 
 var stage = new Konva.Stage({
     container: 'container',
-    width: document.getElementById('container').offsetWidth,
-    height: height / 1.5
+    width: containerEl.offsetWidth || 600,
+    height: 320
 });
+
 var layer = new Konva.Layer();
 
 var vectorGroup = new Konva.Group({
-    x: stage.getWidth() / scale - 100,
-    y: stage.getHeight() / scale,
+    x: stage.getWidth() / scale - 50,
+    y: stage.getHeight() / 2,
 });  
 
 var textGroup = new Konva.Group({});    
@@ -24,7 +24,7 @@ function vectorText(vectext, xpos, ypos, color, opac) {
         y: ypos,
         text: vectext,
         fontStyle: 'bold',
-        fontSize: 30,
+        fontSize: 24,
         fontFamily: 'Calibri',
         opacity: opac,
         fill: color
@@ -37,8 +37,8 @@ function vector(vert, xpos, ypos, start, end, color, opac) {
         x: xpos,
         y: ypos,
         points: [start, vert, end, vert],
-        pointerLength: 20,
-        pointerWidth: 20,
+        pointerLength: 15,
+        pointerWidth: 15,
         fill: color,
         stroke: color,
         opacity: opac,
@@ -47,13 +47,19 @@ function vector(vert, xpos, ypos, start, end, color, opac) {
     return that; 
 }  
 
-var augendText = vectorText(aug / 40, stage.getWidth() / scale + aug / 2 - 120, stage.getHeight() / scale + 20, 'green', 0);  
-var addendText = vectorText(add / 40, stage.getWidth() / scale + aug / 2 - 120 + add / 2, stage.getHeight() / scale + 20, 'blue', 0);  
-var sumText = vectorText(add / 40 + aug / 40, stage.getWidth() / scale + add / 2 - 120, stage.getHeight() / scale - 100, 'red', 0);   
+var currentAugVal = 5;
+var currentAddVal = 8;
+
+var aug = 25 * currentAugVal;
+var add = aug + 25 * currentAddVal;
+
+var augendText = vectorText(currentAugVal, stage.getWidth() / scale + aug / 2 - 50, stage.getHeight() / 2 + 20, 'green', 0);  
+var addendText = vectorText(currentAddVal, stage.getWidth() / scale + aug + (add - aug) / 2 - 50, stage.getHeight() / 2 + 20, 'blue', 0);  
+var sumText = vectorText(currentAugVal + currentAddVal, stage.getWidth() / scale + add / 2 - 50, stage.getHeight() / 2 - 70, 'red', 0);   
 
 var augend = vector(0, 0, 0, 0, aug, 'green', 0);
 var addend = vector(0, 0, 0, aug, add, 'blue', 0);  
-var sum = vector(-50, 0, 0, 0, add, 'red', 0);  
+var sum = vector(-40, 0, 0, 0, add, 'red', 0);  
 
 vectorGroup.add(augend);
 vectorGroup.add(addend);
@@ -66,6 +72,53 @@ layer.add(vectorGroup);
 layer.add(textGroup);
 
 stage.add(layer);
+
+// Function to dynamically update dimensions and positions on resize or new example
+function updateLayout() {
+    var containerWidth = containerEl.offsetWidth;
+    var containerHeight = 320;
+
+    if (containerWidth <= 0) return;
+
+    stage.width(containerWidth);
+    stage.height(containerHeight);
+
+    // Calculate dynamic unit scaling factor so maximum vector length fits comfortably
+    var maxUnits = Math.max(currentAugVal + currentAddVal, 10);
+    var availableWidth = containerWidth * 0.75;
+    var unitPx = Math.min(availableWidth / maxUnits, 25);
+
+    aug = unitPx * currentAugVal;
+    add = aug + unitPx * currentAddVal;
+
+    var startX = Math.max((containerWidth - add) / 2, 20);
+    var centerY = containerHeight / 2;
+
+    vectorGroup.x(startX);
+    vectorGroup.y(centerY);
+
+    augend.points([0, 0, aug, 0]);
+    addend.points([aug, 0, add, 0]);
+    sum.points([0, -40, add, -40]);
+
+    augendText.text(currentAugVal);
+    augendText.x(startX + aug / 2 - 8);
+    augendText.y(centerY + 15);
+
+    addendText.text(currentAddVal);
+    addendText.x(startX + aug + (add - aug) / 2 - 8);
+    addendText.y(centerY + 15);
+
+    sumText.text(currentAugVal + currentAddVal);
+    sumText.x(startX + add / 2 - 8);
+    sumText.y(centerY - 75);
+
+    layer.draw();
+}
+
+// Window resize listener
+window.addEventListener('resize', updateLayout);
+updateLayout();
 
 document.getElementById('Reset').addEventListener('click', function() {
     augendText.opacity(0);
@@ -108,31 +161,8 @@ document.getElementById('Step 3').addEventListener('click', function() {
 }, true);   
 
 document.getElementById('New Example').addEventListener('click', function() {
-    augendText.opacity(0);
-    addendText.opacity(0);
-    sumText.opacity(0);
-    augend.opacity(0);
-    addend.opacity(0);
-    sum.opacity(0);
+    currentAugVal = Math.floor((Math.random() * 8) + 1);
+    currentAddVal = Math.floor((Math.random() * 8) + 1);
     
-    var aug = 40 * Math.floor((Math.random() * 10) + 1);
-    var add = aug + 40 * Math.floor((Math.random() * 10) + 1);
-    
-    augend.points([0, 0, aug, 0]);
-    addend.points([aug, 0, add, 0]);
-    sum.points([0, -50, add, -50]);
-    
-    augendText.text(aug / 40);
-    augendText.x(stage.getWidth() / scale + aug / 2 - 120);
-    augendText.y(stage.getHeight() / scale + 20);
-    
-    addendText.text(add / 40);
-    addendText.x(stage.getWidth() / scale + aug / 2 - 120 + add / 2);
-    addendText.y(stage.getHeight() / scale + 20);
-    
-    sumText.text(aug / 40 + add / 40);
-    sumText.x(stage.getWidth() / scale + add / 2 - 120);
-    sumText.y(stage.getHeight() / scale - 100);
-    
-    layer.draw();
+    updateLayout();
 }, true);
