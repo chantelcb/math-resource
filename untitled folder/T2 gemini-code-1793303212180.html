@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition: Vectors - Math Lessons</title>
+    <!-- Konva JS Library -->
+    <script src="https://cdn.rawgit.com/konvajs/konva/0.9.0/konva.min.js"></script>
+    <link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+    <header>
+        <nav><a href="../../index.html">← Back to Lessons</a></nav>
+    </header>
+
+    <main class="content-container">
+        <h1>Addition: Vectors</h1>
+        
+        <p>In the previous section we talked about additive inverses by describing them in terms of discrete objects or quantities. Another useful way of thinking about integers is as vectors[cite: 3].</p>
+        
+        <p>Remember how our Hindu-Arabic numeral system gave us a way of expressing quantities by encoding information about sizes of groups according to place value position and information about the number of groups of each size by the face value of the digit in the corresponding position? In the context of measurement, the size of a number is called its magnitude and describes its distance away from 0[cite: 3].</p>
+        
+        <p>Integers convey all of the same information as natural numbers - the numeral indicates the magnitude, or size of the number. In addition, Vectors also convey information about direction, which is given by the sign of the number (either positive (+) or negative (-)). We can represent vectors geometrically with an arrow where the length of the arrow corresponds to the magnitude of a number and the direction of the arrow is given by the sign of the number[cite: 3].</p>
+
+        <!-- Interactive Widget Section -->
+        <div class="interactive-figure">
+            <div class="buttons">
+                <button id="Reset">Reset</button>
+                <button id="Step 1">Step 1</button>
+                <button id="Step 2">Step 2</button>
+                <button id="Step 3">Step 3</button>
+                <button id="New Example">New Example</button> 
+            </div>
+            <div id="container"></div>
+        </div>
+
+        <p>Integers are useful for keeping track of quantities, but can also be used to give directions. For example, consider the following set of simple instructions: Take two steps right then take 3 more steps right[cite: 3].</p>
+        
+        <p>If we let the direction “right” correspond to the positive sign and “left” correspond to the negative sign, we could give directions like this: Take 3 steps followed by -2 steps. This is the same as saying take 3 steps to the right then take two steps to the left[cite: 3].</p>
+        
+        <p>Notice that our ending position corresponds to the sum 3 + -2 = 1. Geometrically, we say that vectors add by positioning the vectors nose to tail. The final position of the head of the last arrow corresponds to the quantity represented by the sum[cite: 3].</p>
+
+        <h2>Exploring Further</h2>
+        <p>Being able to express simple directions like this using vectors actually gives you the building blocks for learning about computer programming[cite: 3]. Have you ever wondered how your computer applications, or even your calculator, know how to do what they do? Someone had to program them by giving them directions telling your computer what to do with information you put into it[cite: 3].</p>
+    </main>
+
+    <!-- Interactive Logic Script -->
+    <script type="text/javascript" src="dynamicexample.js"></script>
+</body>
+</html>
